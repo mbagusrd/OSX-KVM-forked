@@ -52,19 +52,20 @@ args=(
   -smbios type=2
   -device ich9-intel-hda -device hda-duplex
   -device ich9-ahci,id=sata
-  -device ide-hd,bus=sata.0,drive=MacDisk
-  -drive if=none,id=MacDisk,format=qcow2,file="$DISK_DIR/macOSVentura.img"
-  -device ide-hd,bus=sata.1,drive=OpenCoreBoot
-  -drive if=none,id=OpenCoreBoot,format=raw,file="$ISO_DIR/OpenCore-v19.iso"
   # -device ide-hd,bus=sata.1,drive=OpenCoreBoot
   # -drive if=none,id=OpenCoreBoot,format=qcow2,file="$REPO_PATH/OpenCore/OpenCore.qcow2"
+  -drive if=none,id=OpenCoreBoot,file="$ISO_DIR/OpenCore-v19.iso"
+  -device ide-hd,bus=sata.0,drive=OpenCoreBoot,bootindex=1
+  -drive if=none,id=MacDisk,format=qcow2,file="$DISK_DIR/macOSVentura.img"
+  -device ide-hd,bus=sata.1,drive=MacDisk
+  -drive if=none,id=InstallMedia,file="$ISO_DIR/Ventura-full.img"
   -device ide-hd,bus=sata.2,drive=InstallMedia
-  -drive if=none,id=InstallMedia,format=raw,file="$ISO_DIR/Ventura-full.img"
   # -netdev tap,id=net0,ifname=tap0,script=no,downscript=no -device virtio-net-pci,netdev=net0,id=net0,mac=52:54:00:c9:18:27
   -netdev user,id=net0 -device virtio-net-pci,netdev=net0,id=net0,mac=52:54:00:c9:18:27
   # -netdev user,id=net0 -device vmxnet3,netdev=net0,id=net0,mac=52:54:00:c9:18:27  # Note: Use this line for High Sierra
   -monitor stdio
   -device VGA,vgamem_mb=128
+  -vga virtio
 )
 
 qemu-system-x86_64 "${args[@]}"
